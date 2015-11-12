@@ -53,11 +53,11 @@ describe Dog do
   describe '#insert' do
     it 'inserts the dog into the database' do
       teddy = Dog.new
-      teddy.id = attributes[:id]
-      teddy.name = attributes[:name]
-      teddy.color = attributes[:color]
-      teddy.breed = attributes[:breed]
-      teddy.instagram = attributes[:instagram]
+      teddy.id = 1
+      teddy.name = 'Teddy'
+      teddy.color = 'Black'
+      teddy.breed = 'cockapoo'
+      teddy.instagram = 'theodore_michael'
 
       teddy.insert
 
@@ -68,11 +68,11 @@ describe Dog do
 
     it 'updates the current instance with the ID of the dog from the database' do
       teddy = Dog.new
-      teddy.id = attributes[:id]
-      teddy.name = attributes[:name]
-      teddy.color = attributes[:color]
-      teddy.breed = attributes[:breed]
-      teddy.instagram = attributes[:instagram]
+      teddy.id = 1
+      teddy.name = 'Teddy'
+      teddy.color = 'Black'
+      teddy.breed = 'cockapoo'
+      teddy.instagram = 'theodore_michael'
 
       teddy.insert
 
@@ -96,11 +96,11 @@ describe Dog do
   describe '::find_by_name' do
     it 'returns an instance of student that matches the name from the DB' do
       teddy = Dog.new
-      teddy.id = attributes[:id]
-      teddy.name = attributes[:name]
-      teddy.color = attributes[:color]
-      teddy.breed = attributes[:breed]
-      teddy.instagram = attributes[:instagram]
+      teddy.id = 1
+      teddy.name = 'Teddy'
+      teddy.color = 'Black'
+      teddy.breed = 'cockapoo'
+      teddy.instagram = 'theodore_michael'
 
       teddy.insert
 
@@ -124,7 +124,7 @@ describe Dog do
       teddy_from_db = Dog.find_by_name("Teddy")
       expect(teddy_from_db).to be_nil
 
-      bob_from_db = Dog.find_by_name("Teddy")
+      bob_from_db = Dog.find_by_name("Bob")
       expect(bob_from_db).to be_an_instance_of(Dog)
       expect(bob_from_db.name).to eq("Bob")
       expect(bob_from_db.id).to eq(original_id)
