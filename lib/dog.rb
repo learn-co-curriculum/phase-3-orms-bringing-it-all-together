@@ -1,25 +1,31 @@
-require 'pry'
-require_relative "../config/environment.rb"
-
 class Dog
-
-  attr_accessor :name, :breed, :id
-
-  def initialize(id=nil, name, breed)
-    @id = id
-    @name = name
-    @breed = breed
-  end
+  ATTRIBUTES = {
+    :id => "INTEGER PRIMARY KEY",
+    :name => "TEXT",
+    :color => "TEXT",
+    :breed =>  "TEXT",
+    :instagram =>  "TEXT"
+  }
+  # ATTRIBUTES.keys.each do |attribute|
+  #   attr_accessor attribute
+  # end
+  attr_accessor *ATTRIBUTES.keys
 
   def self.create_table
-    sql =  <<-SQL
+    sql = <<-SQL
       CREATE TABLE IF NOT EXISTS dogs (
-        id INTEGER PRIMARY KEY,
-        name TEXT,
-        breed TEXT
-        )
+        #{schema_definition}
+      )
     SQL
     DB[:conn].execute(sql)
+  end
+
+  def self.schema_definition
+    ATTRIBUTES.collect{|k,v| "#{k} #{v}"}.join(",")
+  end
+
+  def sql_for_update
+    ATTRIBUTES.keys[1..-1].collect{|k| "#{k} = ?"}.join(",")
   end
 
   def self.drop_table
@@ -27,82 +33,42 @@ class Dog
     DB[:conn].execute(sql)
   end
 
-  def save
-    if self.id
-      self.update
-    else
-      sql = <<-SQL
-        INSERT INTO dogs (name, breed)
-        VALUES (?, ?)
-      SQL
-      DB[:conn].execute(sql, self.name, self.breed)
-      @id = DB[:conn].execute("SELECT last_insert_rowid() FROM dogs")[0][0]
-    end
-    self
-  end
-
-  def self.create(name:, breed:)
-    dog = Dog.new(name, breed)
-    dog.save
-    dog
-  end
-
- def self.find_or_create_by(name:, breed:)
-    sql = <<-SQL
-          SELECT *
-          FROM dogs
-          WHERE name = ?  
-          AND breed = ?
-          LIMIT 1
-        SQL
-
-    dog = DB[:conn].execute(sql,name,breed)
-
-    if !dog.empty?
-      dog_data = dog[0]
-      dog = Dog.new(dog_data[0], dog_data[1], dog_data[2])
-    else
-      dog = self.create(name: name, breed: breed)
-    end
-    dog
-  end
-
   def self.new_from_db(row)
-    id = row[0]
-    name = row[1]
-    breed = row[2]
-    self.new(id, name, breed)
+    self.new.tap do |s|
+      row.each_with_index do |value, index|
+        s.send("#{ATTRIBUTES.keys[index]}=", value)
+      end
+    end
   end
 
   def self.find_by_name(name)
-    sql = <<-SQL
-      SELECT *
-      FROM dogs
-      WHERE name = ?
-      LIMIT 1
-    SQL
-
-    DB[:conn].execute(sql,name).map do |row|
-      self.new_from_db(row)
-    end.first
+    sql = "SELECT * FROM dogs WHERE name = ?"
+    result = DB[:conn].execute(sql,name)[0] #[]
+    self.new_from_db(result) if result
   end
 
-  def self.find_by_id(id)
-    sql = <<-SQL
-      SELECT *
-      FROM dogs
-      WHERE id = ?
-      LIMIT 1
-    SQL
-
-    DB[:conn].execute(sql,id).map do |row|
-      self.new_from_db(row)
-    end.first
+  def attribute_values
+    ATTRIBUTES.keys[1..-1].collect{|key| self.send(key)}
   end
+
+  def insert
+    sql = "INSERT INTO dogs (#{ATTRIBUTES.keys[1..-1].join(",")}) VALUES (?,?,?,?)"
+    DB[:conn].execute(sql, *attribute_values)
+
+    @id = DB[:conn].execute("SELECT last_insert_rowid() FROM dogs")[0][0]
+  end
+
 
   def update
-    sql = "UPDATE dogs SET name = ?, breed = ?  WHERE id = ?"
-    DB[:conn].execute(sql, self.name, self.breed, self.id)
+    sql = "UPDATE dogs SET #{sql_for_update} WHERE id = ?"
+    DB[:conn].execute(sql, *attribute_values, id)
   end
 
+  def persisted?
+    !!self.id
+  end
+
+  def save
+    persisted? ? update : insert
+  end
 end
