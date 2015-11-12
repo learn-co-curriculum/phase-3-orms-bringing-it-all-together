@@ -9,22 +9,22 @@ describe Dog do
         attributes = {
           :id => 1,
           :name => "Teddy",
-          :breed => "Cockapoo",
           :color => "Black",
+          :breed => "Cockapoo",
           :instagram => "theodore_michael"
         }
 
         teddy = Dog.new
         teddy.id = attributes[:id]
         teddy.name = attributes[:name]
-        teddy.breed = attributes[:breed]
         teddy.color = attributes[:color]
+        teddy.breed = attributes[:breed]
         teddy.instagram = attributes[:instagram]
 
         expect(teddy.id).to eq(attributes[:id])
         expect(teddy.name).to eq(attributes[:name])
-        expect(teddy.breed).to eq(attributes[:breed])
         expect(teddy.color).to eq(attributes[:color])
+        expect(teddy.breed).to eq(attributes[:breed])
         expect(teddy.instagram).to eq(attributes[:instagram])
 
       end
@@ -34,7 +34,7 @@ describe Dog do
   describe '::create_table' do
     it 'creates a dog table' do
       DB[:conn].execute('DROP TABLE IF EXISTS dogs')
-      dog.create_table
+      Dog.create_table
 
       table_check_sql = "SELECT tbl_name FROM sqlite_master WHERE type='table' AND tbl_name='dogs';"
       expect(DB[:conn].execute(table_check_sql)[0]).to eq(['dogs'])
@@ -43,7 +43,7 @@ describe Dog do
 
   describe '::drop_table' do
     it "drops the dog table" do
-      dog.drop_table
+      Dog.drop_table
 
       table_check_sql = "SELECT tbl_name FROM sqlite_master WHERE type='table' AND tbl_name='dogs';"
       expect(DB[:conn].execute(table_check_sql)[0]).to be_nil
@@ -55,15 +55,14 @@ describe Dog do
       teddy = Dog.new
       teddy.id = attributes[:id]
       teddy.name = attributes[:name]
-      teddy.breed = attributes[:breed]
       teddy.color = attributes[:color]
+      teddy.breed = attributes[:breed]
       teddy.instagram = attributes[:instagram]
 
       teddy.insert
 
       select_sql = "SELECT name FROM dogs WHERE name = 'Teddy'"
       result = DB[:conn].execute(select_sql)[0]
-
       expect(result[0]).to eq("Teddy")
     end
 
@@ -71,8 +70,8 @@ describe Dog do
       teddy = Dog.new
       teddy.id = attributes[:id]
       teddy.name = attributes[:name]
-      teddy.breed = attributes[:breed]
       teddy.color = attributes[:color]
+      teddy.breed = attributes[:breed]
       teddy.instagram = attributes[:instagram]
 
       teddy.insert
@@ -88,8 +87,8 @@ describe Dog do
 
       expect(teddy.id).to eq(row[0])
       expect(teddy.name).to eq(row[1])
-      expect(teddy.breed).to eq(row[2])
-      expect(teddy.color).to eq(row[3])
+      expect(teddy.color).to eq(row[2])
+      expect(teddy.breed).to eq(row[3])
       expect(teddy.instagram).to eq(row[4])
     end
   end
@@ -99,8 +98,8 @@ describe Dog do
       teddy = Dog.new
       teddy.id = attributes[:id]
       teddy.name = attributes[:name]
-      teddy.breed = attributes[:breed]
       teddy.color = attributes[:color]
+      teddy.breed = attributes[:breed]
       teddy.instagram = attributes[:instagram]
 
       teddy.insert
@@ -135,13 +134,13 @@ describe Dog do
   describe '#save' do
     it "chooses the right thing on first save" do
       teddy = Dog.new
-      tedd.name = "Teddy"
+      teddy.name = "Teddy"
       expect(teddy).to receive(:insert)
       teddy.save
     end
 
     it 'chooses the right thing for all others' do
-      tedd = Dog.new
+      teddy = Dog.new
       teddy.name = "Teddy"
       teddy.save
 
