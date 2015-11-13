@@ -1,31 +1,25 @@
+require 'pry'
+require_relative "../config/environment.rb"
+
 class Dog
-  ATTRIBUTES = {
-    :id => "INTEGER PRIMARY KEY",
-    :name => "TEXT",
-    :color => "TEXT",
-    :breed =>  "TEXT",
-    :instagram =>  "TEXT"
-  }
-  # ATTRIBUTES.keys.each do |attribute|
-  #   attr_accessor attribute
-  # end
-  attr_accessor *ATTRIBUTES.keys
+
+  attr_accessor :name, :breed, :id
+
+  def initialize(id=nil, name, breed)
+    @id = id
+    @name = name
+    @breed = breed
+  end
 
   def self.create_table
-    sql = <<-SQL
+    sql =  <<-SQL
       CREATE TABLE IF NOT EXISTS dogs (
-        #{schema_definition}
-      )
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        breed TEXT
+        )
     SQL
     DB[:conn].execute(sql)
-  end
-
-  def self.schema_definition
-    ATTRIBUTES.collect{|k,v| "#{k} #{v}"}.join(",")
-  end
-
-  def sql_for_update
-    ATTRIBUTES.keys[1..-1].collect{|k| "#{k} = ?"}.join(",")
   end
 
   def self.drop_table
@@ -33,57 +27,55 @@ class Dog
     DB[:conn].execute(sql)
   end
 
-  def self.new_from_db(row)
-    self.new.tap do |s|
-      row.each_with_index do |value, index|
-        s.send("#{ATTRIBUTES.keys[index]}=", value)
-      end
-    end
-  end
+  def save
+    sql = <<-SQL
+      INSERT INTO dogs (name, breed)
+      VALUES (?, ?)
+    SQL
 
-  def self.find_by_name(name)
-    sql = "SELECT * FROM dogs WHERE name = ?"
-    result = DB[:conn].execute(sql,name)[0] #[]
-    self.new_from_db(result) if result
-  end
-
-  def attribute_values
-    ATTRIBUTES.keys[1..-1].collect{|key| self.send(key)}
-  end
-
-  def insert
-    sql = "INSERT INTO dogs (#{ATTRIBUTES.keys[1..-1].join(",")}) VALUES (?,?,?,?)"
-    DB[:conn].execute(sql, *attribute_values)
+    DB[:conn].execute(sql, self.name, self.breed)
 
     @id = DB[:conn].execute("SELECT last_insert_rowid() FROM dogs")[0][0]
   end
 
-
-  def update
-    sql = "UPDATE dogs SET #{sql_for_update} WHERE id = ?"
-    DB[:conn].execute(sql, *attribute_values, id)
-  end
-
-  def persisted?
-    !!self.id
-  end
-
-  def save
-    persisted? ? update : insert
-  end
-
-  def self.create(name:, color:, breed:, instagram:)
-    dog = Dog.new(name, color, breed, instagram)
+  def self.create(name:, breed:)
+    dog = Dog.new(name, breed)
     dog.save
   end
 
-  def self.find_or_create_by(name:, color:, breed:, instagram:)
-    if !DB[:conn].execute("SELECT * FROM dogs WHERE name = #{name}, color = #{color}, breed = #{breed}, instagram = #{instagram}").empty?
-      dog = Dog.find_by_name(name)
-      dog.update
-    else
-      self.create(name: name, color: color, breed: breed, instagram: instagram)
-    end
+
+  def self.find_or_create_by(name:, breed:)
+   if !DB[:conn].execute("SELECT * FROM dogs WHERE name = #{name}, breed = #{breed}").empty?
+     dog = Dog.find_by_name(name)
+     dog.update
+   else
+     self.create(name: name, breed: breed)
+   end
+ end
+
+  def self.new_from_db(row)
+    id = row[0]
+    name = row[1]
+    breed = row[2]
+    self.new(id, name, breed)
+  end
+
+  def self.find_by_name(name)
+    sql = <<-SQL
+      SELECT *
+      FROM dogs
+      WHERE name = ?
+      LIMIT 1
+    SQL
+
+    DB[:conn].execute(sql,name).map do |row|
+      self.new_from_db(row)
+    end.first
+  end
+
+  def update
+    sql = "UPDATE dogs SET name = ?, breed = ?  WHERE id = ?"
+    DB[:conn].execute(sql, self.name, self.breed, self.id)
   end
 
 end
