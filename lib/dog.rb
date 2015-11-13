@@ -71,4 +71,19 @@ class Dog
   def save
     persisted? ? update : insert
   end
+
+  def self.create(name:, color:, breed:, instagram:)
+    dog = Dog.new(name, color, breed, instagram)
+    dog.save
+  end
+
+  def self.find_or_create_by(name:, color:, breed:, instagram:)
+    if !DB[:conn].execute("SELECT * FROM dogs WHERE name = #{name}, color = #{color}, breed = #{breed}, instagram = #{instagram}").empty?
+      dog = Dog.find_by_name(name)
+      dog.update
+    else
+      self.create(name: name, color: color, breed: breed, instagram: instagram)
+    end
+  end
+
 end
