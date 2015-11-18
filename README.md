@@ -16,14 +16,16 @@ This lab involves building a basic ORM for a Dog object.  The `Dog` class define
       However, in our spec_helper, our  testing environment, we're going to redefine the value of that key (not of the constant though) to point to an in-memory database. This will allow our tests to run in isolation of our production database. Whenever we want to refer to the  applications connection to the database, we will simply rely on   `DB[:conn]`.
 
 ## Solving The Lab: The Spec Suite
--  **RSpec Test 1: `#attributes`**
+
+###Start with these methods
+
+-  **`#attributes`**
 
   The first test is concerned solely with making sure that our dogs have all the required attributes and that they are readable and writeable.
 
 -  **`::create_table`**
   Your task  here is to define a class method on Dog that will execute  the correct SQL to create a dogs table.
 
-###Start with these methods
     ```ruby
     describe '::create_table' do
         it 'creates a student table' do
