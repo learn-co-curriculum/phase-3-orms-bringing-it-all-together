@@ -28,6 +28,7 @@ This lab involves building a basic ORM for a Dog object.  The `Dog` class define
 -  **`::create_table`**
   Your task  here is to define a class method on Dog that will execute the correct SQL to create a dogs table.
 
+<<<<<<< HEAD
 ```ruby
 describe '::create_table' do
   it 'creates a dogs table' do
@@ -43,6 +44,23 @@ end
   Our test first makes sure that we are starting with a clean database by executing the SQL command `DROP TABLE IF EXISTS dogs`.
 
   Next we call the soon-to-be defined `create_table` method, which is responsible for creating a table called dogs with the appropriate columns.
+=======
+    ```ruby
+    describe '::create_table' do
+        it 'creates a dogs table' do
+          DB[:conn].execute('DROP TABLE IF EXISTS dogs')
+          Dog.create_table
+
+          table_check_sql = "SELECT tbl_name FROM sqlite_master WHERE type='table' AND tbl_name='dogs';"
+          expect(DB[:conn].execute(table_check_sql)[0]).to eq(['dogs'])
+        end
+    end
+    ```
+
+  Our test first makes sure that we are starting with a clean database by executing the SQL command `DROP TABLE IF EXISTS dogs`.
+
+  Next we call the soon to be defined `create_table` method, which is responsible for creating a table called dogs with the appropriate columns.
+>>>>>>> readme fixes
 
 -  **`::drop_table`**
 This method will drop the dogs table from the database.
@@ -58,11 +76,19 @@ This method will drop the dogs table from the database.
   end
 ```
 
+<<<<<<< HEAD
   It is basically the exact opposite of the previous test. Your job is to define a class method on `Dog` that will execute the correct SQL to drop a dogs table.
 
 - **`::new_from_db`**
 
   This is an interesting method. Ultimately, the database is going to return an array representing a dog's data. We need a way to cast that data into the appropriate attributes of a dog. This method encapsulates that functionality. You can even think of it as  `new_from_array`. Methods like this, that return instances of the class, are known as constructors, just like `.new`, except that they extend the functionality of `.new` without overwriting `initialize`.
+=======
+  It is basically the exact opposite of the previous test. Your job is to  define a class method on `Dog` that will execute the correct SQL to drop  a dogs table.
+
+- **`::new_from_db`**
+
+  This is an interesting method. Ultimately, the database is going to return an array representing a dogs's data. We need a way to cast that data into the appropriate attributes of a dogs. This method  encapsulates that functionality. You can even think of it as  new_from_array. Methods like this, that return instances of the class,  are known as constructors, just like `::new`, except that they extend the   functionality of `::new` without overwriting `initialize`
+>>>>>>> readme fixes
 
 - **`::find_by_name`**
 
