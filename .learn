@@ -5,4 +5,5 @@ tags:
 languages:
   - sql
   - ruby
-resources: 1
+resources: 
+  - 1
