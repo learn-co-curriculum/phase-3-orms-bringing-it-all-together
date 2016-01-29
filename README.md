@@ -80,4 +80,4 @@ This method will drop the dogs table from the database.
 
   In the next test, we create an instance, save it, change it's name, and then   specify that a call to the save method should trigger an `update`.
 
-<a href='https://learn.co/lessons/bringing-it-all-together' data-visibility='hidden'>View this lesson on Learn.co</a>
+<p data-visibility='hidden'>View <a href='https://learn.co/lessons/bringing-it-all-together' title='Basic Dog ORM'>Basic Dog ORM</a> on Learn.co and start learning to code for free.</p>
