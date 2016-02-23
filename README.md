@@ -23,6 +23,8 @@ This lab involves building a basic ORM for a Dog object.  The `Dog` class define
 
   The first test is concerned solely with making sure that our dogs have all the required attributes and that they are readable and writeable.
 
+  The initialize method accepts a hash or keyword argument value with key-value pairs as an argument. key-value pairs need to contain id, name, and breed.
+
 -  **`::create_table`**
   Your task  here is to define a class method on Dog that will execute  the correct SQL to create a dogs table.
 
