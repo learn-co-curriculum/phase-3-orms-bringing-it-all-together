@@ -27,6 +27,14 @@ describe "Dog" do
     it 'has an id that defaults to `nil` on initialization' do
       expect(teddy.id).to eq(nil)
     end
+    
+    it 'accepts key value pairs as arguments to initialize' do 
+      params = {id: 1, name: "Caldwell", breed: "toy poodle"}
+
+      dog = Dog.new(params)
+      expect(dog.name).to eq("Caldwell")
+      expect(dog.breed).to eq("toy poodle")
+    end
   end
 
   describe "#create_table" do
