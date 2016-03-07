@@ -27,7 +27,7 @@ describe "Dog" do
     it 'has an id that defaults to `nil` on initialization' do
       expect(teddy.id).to eq(nil)
     end
-    
+
     it 'accepts key value pairs as arguments to initialize' do 
       params = {id: 1, name: "Caldwell", breed: "toy poodle"}
 
@@ -136,8 +136,7 @@ describe "Dog" do
     it 'updates the record associated with a given instance' do
       teddy.save
       teddy.name = "Teddy Jr."
-      teddy.save
-
+      teddy.update
       teddy_jr = Dog.find_by_name("Teddy Jr.")
       expect(teddy_jr.id).to eq(teddy.id)
     end

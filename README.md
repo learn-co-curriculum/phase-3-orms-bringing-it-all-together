@@ -28,17 +28,17 @@ This lab involves building a basic ORM for a Dog object.  The `Dog` class define
 -  **`::create_table`**
   Your task  here is to define a class method on Dog that will execute  the correct SQL to create a dogs table.
 
-    ```ruby
-    describe '::create_table' do
-        it 'creates a dogs table' do
-          DB[:conn].execute('DROP TABLE IF EXISTS dogs')
-          Dog.create_table
+```ruby
+describe '::create_table' do
+  it 'creates a dogs table' do
+    DB[:conn].execute('DROP TABLE IF EXISTS dogs')
+    Dog.create_table
 
-          table_check_sql = "SELECT tbl_name FROM sqlite_master WHERE type='table' AND tbl_name='dogs';"
-          expect(DB[:conn].execute(table_check_sql)[0]).to eq(['dogs'])
-        end
-    end
-    ```
+    table_check_sql = "SELECT tbl_name FROM sqlite_master WHERE type='table' AND tbl_name='dogs';"
+    expect(DB[:conn].execute(table_check_sql)[0]).to eq(['dogs'])
+  end
+end
+```
 
   Our test first makes sure that we are starting with a clean database by executing the SQL command `DROP TABLE IF EXISTS dogs`.
 
@@ -47,7 +47,7 @@ This lab involves building a basic ORM for a Dog object.  The `Dog` class define
 -  **`::drop_table`**
 This method will drop the dogs table from the database.
 
-  ```ruby
+```ruby
   describe '::drop_table' do
     it "drops the dogs table" do
         Dog.drop_table
