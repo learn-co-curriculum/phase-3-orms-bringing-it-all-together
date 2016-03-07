@@ -1,4 +1,4 @@
-<!-- # Basic Dog ORM
+# Basic Dog ORM
 
 ## Objectives
 * Understand what an Object Relational Mapper(ORM) is
@@ -79,9 +79,5 @@ This method will drop the dogs table from the database.
   In the first test we create an instance, specify, since it has never been   saved before, that the instance will receive a method call to `insert`.
 
   In the next test, we create an instance, save it, change it's name, and then   specify that a call to the save method should trigger an `update`.
-<<<<<<< HEAD
 
 <a href='https://learn.co/lessons/bringing-it-all-together' data-visibility='hidden'>View this lesson on Learn.co</a>
-=======
->>>>>>> d18e06dfd61e684d727ac8f300d325064c88517d
- -->
