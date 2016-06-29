@@ -28,7 +28,7 @@ describe "Dog" do
       expect(teddy.id).to eq(nil)
     end
 
-    it 'accepts key value pairs as arguments to initialize' do 
+    it 'accepts key value pairs as arguments to initialize' do
       params = {id: 1, name: "Caldwell", breed: "toy poodle"}
 
       dog = Dog.new(params)
@@ -54,6 +54,12 @@ describe "Dog" do
   end
 
   describe "#save" do
+    it 'returns an instance of the dog class' do
+      dog = teddy.save
+
+      expect(dog).to be_instance_of(Dog)
+    end
+
     it 'saves an instance of the dog class to the database and then sets the given dogs `id` attribute' do
       dog = teddy.save
 
