@@ -62,7 +62,7 @@ This method will drop the dogs table from the database.
 
 - **`::new_from_db`**
 
-  This is an interesting method. Ultimately, the database is going to return an array representing a dogs's data. We need a way to cast that data into the appropriate attributes of a dogs. This method  encapsulates that functionality. You can even think of it as  new_from_array. Methods like this, that return instances of the class,  are known as constructors, just like `::new`, except that they extend the   functionality of `::new` without overwriting `initialize`
+  This is an interesting method. Ultimately, the database is going to return an array representing a dog's data. We need a way to cast that data into the appropriate attributes of a dogs. This method  encapsulates that functionality. You can even think of it as  new_from_array. Methods like this, that return instances of the class,  are known as constructors, just like `::new`, except that they extend the   functionality of `::new` without overwriting `initialize`
 
 - **`::find_by_name`**
 
@@ -83,3 +83,5 @@ This method will drop the dogs table from the database.
   In the next test, we create an instance, save it, change it's name, and then   specify that a call to the save method should trigger an `update`.
 
 <p data-visibility='hidden'>View <a href='https://learn.co/lessons/bringing-it-all-together' title='Basic Dog ORM'>Basic Dog ORM</a> on Learn.co and start learning to code for free.</p>
+
+<p class='util--hide'>View <a href='https://learn.co/lessons/bringing-it-all-together'>ORMs Lab: Bringing It All Together</a> on Learn.co and start learning to code for free.</p>
