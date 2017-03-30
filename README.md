@@ -25,11 +25,11 @@ This lab involves building a basic ORM for a Dog object.  The `Dog` class define
 
   The `#initialize` method accepts a hash or keyword argument value with key-value pairs as an argument. key-value pairs need to contain id, name, and breed.
 
--  **`::create_table`**
+-  **`.create_table`**
   Your task  here is to define a class method on Dog that will execute the correct SQL to create a dogs table.
 
 ```ruby
-describe '::create_table' do
+describe '.create_table' do
   it 'creates a dogs table' do
     DB[:conn].execute('DROP TABLE IF EXISTS dogs')
     Dog.create_table
@@ -44,11 +44,11 @@ end
 
   Next we call the soon to be defined `create_table` method, which is responsible for creating a table called dogs with the appropriate columns.
 
--  **`::drop_table`**
+-  **`.drop_table`**
 This method will drop the dogs table from the database.
 
 ```ruby
-  describe '::drop_table' do
+  describe '.drop_table' do
     it "drops the dogs table" do
         Dog.drop_table
 
@@ -60,11 +60,11 @@ This method will drop the dogs table from the database.
 
   It is basically the exact opposite of the previous test. Your job is to define a class method on `Dog` that will execute the correct SQL to drop a dogs table.
 
-- **`::new_from_db`**
+- **`.new_from_db`**
 
-  This is an interesting method. Ultimately, the database is going to return an array representing a dog's data. We need a way to cast that data into the appropriate attributes of a dog. This method encapsulates that functionality. You can even think of it as  `new_from_array`. Methods like this, that return instances of the class, are known as constructors, just like `::new`, except that they extend the functionality of `::new` without overwriting `initialize`.
+  This is an interesting method. Ultimately, the database is going to return an array representing a dog's data. We need a way to cast that data into the appropriate attributes of a dog. This method encapsulates that functionality. You can even think of it as  `new_from_array`. Methods like this, that return instances of the class, are known as constructors, just like `.new`, except that they extend the functionality of `.new` without overwriting `initialize`.
 
-- **`::find_by_name`**
+- **`.find_by_name`**
 
   This spec will first insert a dog into the database and then attempt to find it by calling the find_by_name method. The expectations are that an instance of the dog class that has all the properties of a dog is returned, not primitive data.
 
