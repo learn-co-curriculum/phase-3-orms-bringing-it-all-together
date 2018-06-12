@@ -13,7 +13,7 @@ This lab involves building a basic ORM for a Dog object.  The `Dog` class define
    - `DB = {:conn => SQLite3::Database.new("db/dogs.db")}`
    `DB` is set equal to a hash, which has a single key, `:conn`. The key, `:conn`,  will have a value of a connection to a sqlite3 database in the db directory.
 
-      However, in our spec_helper, which is our testing environment, we're going to redefine the value of that key (not of the constant) to point to an in-memory database. This will allow our tests to run in isolation of our production database. Whenever we want to refer to the applications connection to the database, we will simply rely on `DB[:conn]`.
+      However, in our spec_helper, which is our testing environment, we're going to redefine the value of that key (not of the constant) to point to an in-memory database. This will allow our tests to run in isolation of our production database. Whenever we want to refer to the application's connection to the database, we will simply rely on `DB[:conn]`.
 
 ## Solving The Lab: The Spec Suite
 
@@ -42,7 +42,7 @@ end
 
   Our test first makes sure that we are starting with a clean database by executing the SQL command `DROP TABLE IF EXISTS dogs`.
 
-  Next we call the soon to be defined `create_table` method, which is responsible for creating a table called dogs with the appropriate columns.
+  Next we call the soon-to-be defined `create_table` method, which is responsible for creating a table called dogs with the appropriate columns.
 
 -  **`.drop_table`**
 This method will drop the dogs table from the database.
@@ -72,7 +72,7 @@ This method will drop the dogs table from the database.
 
 - **`#update`**
 
-  This spec will create and insert a dog, and after, it will change the name of the dog instance and call update. The expectations are that after this operation, there is no dog left in the database with the old name. If we query the database for a dog with the new name, we should find that dog and the ID of that dog should be the same as the original, signifying this is the same dog, they just changed their name.
+  This spec will create and insert a dog, and afterwards, it will change the name of the dog instance and call update. The expectations are that after this operation, there is no dog left in the database with the old name. If we query the database for a dog with the new name, we should find that dog and the ID of that dog should be the same as the original, signifying this is the same dog, they just changed their name.
 
 - **`#save`**
 
