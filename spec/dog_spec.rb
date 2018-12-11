@@ -108,7 +108,7 @@ describe "Dog" do
     end
     it 'when two dogs have the same name and different breed, it returns the correct dog' do
       dog1 = Dog.create(name: 'teddy', breed: 'cockapoo')
-      dog2 = Dog.create(name: 'teddy', breed: 'pug')
+      Dog.create(name: 'teddy', breed: 'pug')
 
       dog_from_db = Dog.find_or_create_by({name: 'teddy', breed: 'cockapoo'})
 
