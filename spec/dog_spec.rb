@@ -94,6 +94,13 @@ describe "Dog" do
 
   describe '.find_or_create_by' do
     it 'creates an instance of a dog if it does not already exist' do
+      dog1 = Dog.create(name: 'BYRONIUS KARBITUS MARIS', breed: 'Kleinpudel')
+      dog2 = Dog.find_or_create_by(name: 'teddy', breed: 'cockapoo')
+
+      expect(dog1.id).to_not eq(dog2.id)
+    end
+
+    it 'does not create a new instance if a matching dog exists' do
       dog1 = Dog.create(name: 'teddy', breed: 'cockapoo')
       dog2 = Dog.find_or_create_by(name: 'teddy', breed: 'cockapoo')
 
@@ -101,7 +108,7 @@ describe "Dog" do
     end
     it 'when two dogs have the same name and different breed, it returns the correct dog' do
       dog1 = Dog.create(name: 'teddy', breed: 'cockapoo')
-      dog2 = Dog.create(name: 'teddy', breed: 'pug')
+      Dog.create(name: 'teddy', breed: 'pug')
 
       dog_from_db = Dog.find_or_create_by({name: 'teddy', breed: 'cockapoo'})
 
