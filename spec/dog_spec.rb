@@ -37,7 +37,7 @@ describe "Dog" do
     end
   end
 
-  describe ".create_table" do
+  describe "#create_table" do
     it 'creates the dogs table in the database' do
       DB[:conn].execute("DROP TABLE IF EXISTS dogs")
       Dog.create_table
@@ -46,7 +46,7 @@ describe "Dog" do
     end
   end
 
-  describe ".drop_table" do
+  describe "#drop_table" do
     it 'drops the dogs table from the database' do
       Dog.drop_table
       table_check_sql = "SELECT tbl_name FROM sqlite_master WHERE type='table' AND tbl_name='dogs';"
@@ -65,11 +65,10 @@ describe "Dog" do
       dog = teddy.save
 
       expect(DB[:conn].execute("SELECT * FROM dogs WHERE id = 1")).to eq([[1, "Teddy", "cockapoo"]])
-      expect(dog.id).to eq(1)
     end
   end
 
-  describe ".create" do
+  describe "#create" do
     it 'takes in a hash of attributes and uses metaprogramming to create a new dog object. Then it uses the #save method to save that dog to the database'do
       Dog.create(name: "Ralph", breed: "lab")
       expect(DB[:conn].execute("SELECT * FROM dogs")).to eq([[1, "Ralph", "lab"]])
@@ -94,13 +93,6 @@ describe "Dog" do
 
   describe '.find_or_create_by' do
     it 'creates an instance of a dog if it does not already exist' do
-      dog1 = Dog.create(name: 'BYRONIUS KARBITUS MARIS', breed: 'Kleinpudel')
-      dog2 = Dog.find_or_create_by(name: 'teddy', breed: 'cockapoo')
-
-      expect(dog1.id).to_not eq(dog2.id)
-    end
-
-    it 'does not create a new instance if a matching dog exists' do
       dog1 = Dog.create(name: 'teddy', breed: 'cockapoo')
       dog2 = Dog.find_or_create_by(name: 'teddy', breed: 'cockapoo')
 
@@ -108,7 +100,7 @@ describe "Dog" do
     end
     it 'when two dogs have the same name and different breed, it returns the correct dog' do
       dog1 = Dog.create(name: 'teddy', breed: 'cockapoo')
-      Dog.create(name: 'teddy', breed: 'pug')
+      dog2 = Dog.create(name: 'teddy', breed: 'pug')
 
       dog_from_db = Dog.find_or_create_by({name: 'teddy', breed: 'cockapoo'})
 
@@ -125,7 +117,7 @@ describe "Dog" do
     end
   end
 
-  describe '.new_from_db' do
+  describe '#new_from_db' do
     it 'creates an instance with corresponding attribute values' do
       row = [1, "Pat", "poodle"]
       pat = Dog.new_from_db(row)
@@ -136,8 +128,8 @@ describe "Dog" do
     end
   end
 
-  describe '.find_by_name' do
-    it 'returns an instance of dog that matches the name from the DB' do
+  describe '#find_by_name' do
+    it 'returns an instance of student that matches the name from the DB' do
       teddy.save
       teddy_from_db = Dog.find_by_name("Teddy")
 
