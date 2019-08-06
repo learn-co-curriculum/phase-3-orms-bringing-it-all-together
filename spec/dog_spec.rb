@@ -107,7 +107,7 @@ describe "Dog" do
       dog1 = Dog.create(name: 'teddy', breed: 'cockapoo')
       dog2 = Dog.find_or_create_by(name: 'teddy', breed: 'cockapoo')
 
-      expect(dog1.id).to eq(dog2.id)
+      expect(dog2.id).to eq(dog1.id)
     end
     it 'when two dogs have the same name and different breed, it returns the correct dog' do
       dog1 = Dog.create(name: 'teddy', breed: 'cockapoo')
