@@ -44,6 +44,8 @@ pairs as an argument. key-value pairs need to contain id, name, and breed.
 Your task  here is to define a class method on Dog that will execute the correct
 SQL to create a dogs table.
 
+**note:** You will notice below a new sign, `::`, placed before methods. Don't worry about it now. It allows methods defined within a class, to be accessed from anywhere outside that class.
+
 ```ruby
 describe '::create_table' do
   it 'creates a dogs table' do
