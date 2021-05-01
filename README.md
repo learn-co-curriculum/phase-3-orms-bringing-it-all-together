@@ -1,10 +1,9 @@
-# Basic Dog ORM
+# ORMs: Bringing it all Together
 
-## Objectives
+## Learning Goals
 
-- Understand what an Object Relational Mapper(ORM) is.
-- Gain ability to implement characteristics of an ORM when using a relational
-  database management system (RDBMS) in a ruby program.
+- Understand what an Object Relational Mapper(ORM) is
+- Gain ability to implement characteristics of an ORM when using a relational database management system (RDBMS) in a ruby program
 
 ## Instructions
 
