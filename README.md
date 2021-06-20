@@ -121,4 +121,14 @@ before, specify that the instance will receive a method call to `insert`.
 In the next test, we create an instance, save it, change its name, and then
 specify that a call to the save method should trigger an `update`.
 
+### Build Advanced Methods
 
+In addition to the methods described above, the spec also requires you to build
+the following:
+
+- `::create`
+- `::find_by_id`
+- `::find_or_create_by`
+
+Read the descriptions of these methods in the spec file, and see if you can use
+the other methods you've already built to create these more advanced methods.
