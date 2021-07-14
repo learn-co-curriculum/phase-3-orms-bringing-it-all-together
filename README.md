@@ -7,17 +7,17 @@
 
 ## Instructions
 
-This lab involves building a basic ORM for a Dog object.  The `Dog` class
+This lab involves building a basic ORM for a Dog object. The `Dog` class
 defined in `lib/dog.rb` implements behaviors of a basic ORM.
 
 ### **Environment**
 
-Our environment is going to be a single point of requires and loads.  It is also
+Our environment is going to be a single point of requires and loads. It is also
 going to define a constant, `DB`, whose sole responsibility is setting up and
 maintaining connection to our application's database.
 
 - `DB = {:conn => SQLite3::Database.new("db/dogs.db")}` `DB` is set equal to a
-  hash, which has a single key, `:conn`. The key, `:conn`,  will have a value of
+  hash, which has a single key, `:conn`. The key, `:conn`, will have a value of
   a connection to a sqlite3 database in the db directory.
 
 However, in our `spec_helper`, which is our testing environment, we're going to
@@ -28,9 +28,7 @@ database, we will simply rely on `DB[:conn]`.
 
 ## Solving The Lab: The Spec Suite
 
-### Start with these methods
-
-- **`#attributes`**
+### Attributes
 
 The first test is concerned solely with making sure that our dogs have all the
 required attributes and that they are readable and writable.
@@ -38,19 +36,16 @@ required attributes and that they are readable and writable.
 The `#initialize` method accepts a hash or keyword argument value with key-value
 pairs as an argument. key-value pairs need to contain id, name, and breed.
 
-- **`::create_table`**
+### `.create_table`
 
-Your task  here is to define a class method on Dog that will execute the correct
+Your task here is to define a class method on Dog that will execute the correct
 SQL to create a dogs table.
 
-**note:** You will notice below a new sign, `::`, placed before methods. Don't worry about it now. It allows methods defined within a class, to be accessed from anywhere outside that class.
-
 ```ruby
-describe '::create_table' do
-  it 'creates a dogs table' do
-    DB[:conn].execute('DROP TABLE IF EXISTS dogs')
+describe ".create_table" do
+  it 'creates the dogs table in the database' do
+    DB[:conn].execute("DROP TABLE IF EXISTS dogs")
     Dog.create_table
-
     table_check_sql = "SELECT tbl_name FROM sqlite_master WHERE type='table' AND tbl_name='dogs';"
     expect(DB[:conn].execute(table_check_sql)[0]).to eq(['dogs'])
   end
@@ -60,75 +55,101 @@ end
 Our test first makes sure that we are starting with a clean database by
 executing the SQL command `DROP TABLE IF EXISTS dogs`.
 
-Next we call the soon-to-be defined `create_table` method, which is responsible
+Next we call the soon-to-be defined `.create_table` method, which is responsible
 for creating a table called dogs with the appropriate columns.
 
-- **`::drop_table`**
+### `.drop_table`
 
 This method will drop the dogs table from the database.
 
 ```ruby
-  describe '::drop_table' do
-    it "drops the dogs table" do
-        Dog.drop_table
-
-      table_check_sql = "SELECT tbl_name FROM sqlite_master WHERE type='table' AND tbl_name='dogs';"
-      expect(DB[:conn].execute(table_check_sql)[0]).to be_nil
-    end
+describe ".drop_table" do
+  it 'drops the dogs table from the database' do
+    Dog.drop_table
+    table_check_sql = "SELECT tbl_name FROM sqlite_master WHERE type='table' AND tbl_name='dogs';"
+    expect(DB[:conn].execute(table_check_sql)[0]).to eq(nil)
   end
+end
 ```
 
 It is basically the exact opposite of the previous test. Your job is to define a
 class method on `Dog` that will execute the correct SQL to drop a dogs table.
 
-- **`::new_from_db`**
+### `#save`
+
+This spec ensures that given an instance of a dog, simply calling `save` will
+insert a new record into the database and return the instance.
+
+### `.create`
+
+This is a class method that should:
+
+- Create a new row in the database
+- Return a new instance of the `Dog` class
+
+Think about how you can re-use the `#save` method to help with this one.
+
+### `.new_from_db`
 
 This is an interesting method. Ultimately, the database is going to return an
 array representing a dog's data. We need a way to cast that data into the
 appropriate attributes of a dog. This method encapsulates that functionality.
-You can even think of it as  `new_from_array`. Methods like this, that return
+You can even think of it as `new_from_array`. Methods like this, that return
 instances of the class, are known as constructors, just like `.new`, except that
 they extend the functionality of `.new` without overwriting `initialize`.
 
-- **`::find_by_name`**
+### `.all`
 
-This spec will first insert a dog into the database and then attempt to find it
-by calling the find_by_name method. The expectations are that an instance of the
-dog class that has all the properties of a dog is returned, not primitive data.
+This class method should return an array of `Dog` instances for every record in
+the `dogs` table.
 
-Internally, what will the `find_by_name` method do to find a dog; which SQL
-statement must it run? Additionally, what method might `find_by_name` use
+### `.find_by_name(name)`
+
+The spec for this method will first insert a dog into the database and then
+attempt to find it by calling the find_by_name method. The expectations are that
+an instance of the dog class that has all the properties of a dog is returned,
+not primitive data.
+
+Internally, what will the `.find_by_name` method do to find a dog; which SQL
+statement must it run? Additionally, what method might `.find_by_name` use
 internally to quickly take a row and create an instance to represent that data?
 
-- **`#update`**
+### `.find(id)`
 
-This spec will create and insert a dog, and afterwards, it will change the name
-of the dog instance and call update. The expectations are that after this
-operation, there is no dog left in the database with the old name. If we query
-the database for a dog with the new name, we should find that dog and the ID of
-that dog should be the same as the original, signifying this is the same dog,
-they just changed their name.
+This class method takes in an ID, and should return a single of `Dog` instance
+for corresponding record in the `dogs` table with that same ID. It behaves
+similarly to the `.find_by_name` method above.
 
-- **`#save`**
+## Bonus Methods
 
-This spec ensures that given an instance of a dog, simply calling `save` will
-trigger the correct operation. To implement this, you will have to figure out a
-way for an instance to determine whether it has been persisted into the DB.
+In addition to the methods described above, there are a few bonus methods if
+you'd like to build out more features. The tests for these methods are commented
+out in the spec file. Comment them back in to run the tests for these methods.
 
-In the first test, we create an instance. Since it has never been saved
-before, specify that the instance will receive a method call to `insert`.
-
-In the next test, we create an instance, save it, change its name, and then
-specify that a call to the save method should trigger an `update`.
-
-### Build Advanced Methods
-
-In addition to the methods described above, the spec also requires you to build
-the following:
-
-- `::create`
-- `::find_by_id`
-- `::find_or_create_by`
+### `.find_or_create_by_name(name)`
 
 Read the descriptions of these methods in the spec file, and see if you can use
 the other methods you've already built to create these more advanced methods.
+
+### `#update`
+
+The spec for this method will create and insert a dog, and afterwards, it will
+change the name of the dog instance and call update. The expectations are that
+after this operation, there is no dog left in the database with the old name. If
+we query the database for a dog with the new name, we should find that dog and
+the ID of that dog should be the same as the original, signifying this is the
+same dog, they just changed their name.
+
+The SQL you'll need to write for this method will involve using the `UPDATE`
+keyword.
+
+### `#save` (again)
+
+Wait, didn't we already make a `#save` method? Well, yes, but we're going to expand
+its functionality! You should change it so that it handles these two cases:
+
+- If called on a `Dog` instance that doesn't have an ID assigned, insert a new
+  row into the database, and return the saved `Dog` instance.
+- If called on a `Dog` instance that _does_ have an ID assigned, use the
+  `#update` method to update the existing dog in the database, and return the
+  updated `Dog` instance.
