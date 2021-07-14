@@ -114,6 +114,15 @@ Internally, what will the `.find_by_name` method do to find a dog; which SQL
 statement must it run? Additionally, what method might `.find_by_name` use
 internally to quickly take a row and create an instance to represent that data?
 
+**Note**: You may be tempted to use the `Dog.all` method to help solve this one.
+While we applaud your intuition to try and keep your code DRY, in this case,
+reusing that code is actually not the best approach. Why? Remember, with
+`Dog.all`, we're loading all the records from the `dogs` table and converting
+them to an array of Ruby objects, which are stored in our program's memory. What
+if our `dogs` table had 10,000 rows? That's a lot of extra Ruby objects! In
+cases like these, it's better to use SQL to only return the dogs we're looking
+for, since SQL extremely well-equipped to work with large sets of data.
+
 ### `.find(id)`
 
 This class method takes in an ID, and should return a single of `Dog` instance
@@ -126,10 +135,12 @@ In addition to the methods described above, there are a few bonus methods if
 you'd like to build out more features. The tests for these methods are commented
 out in the spec file. Comment them back in to run the tests for these methods.
 
-### `.find_or_create_by_name(name)`
+### `.find_or_create_by`
 
-Read the descriptions of these methods in the spec file, and see if you can use
-the other methods you've already built to create these more advanced methods.
+This method takes a name and a breed as keyword arguments. If there is already a
+dog in the database with the name and breed provided, it returns that dog.
+Otherwise, it inserts a new dog into the database, and returns the newly created
+dog.
 
 ### `#update`
 

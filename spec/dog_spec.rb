@@ -1,6 +1,4 @@
 describe Dog do
-  let(:teddy) { Dog.new(name: "Teddy", breed: "cockapoo") }
-
   before do
     DB[:conn].execute("DROP TABLE IF EXISTS dogs")
     sql =  <<-SQL
@@ -132,13 +130,12 @@ describe Dog do
 
       expect(dog_from_db).to have_attributes(
         class: Dog,
-        id: 1,
-        name: "Kevin",
-        breed: "shepard"
+        id: 2,
+        name: "Dave",
+        breed: "poodle"
       )
     end
   end
-
 
   # BONUS! uncomment the tests below for an extra challenge
   # describe '.find_or_create_by' do
@@ -148,20 +145,22 @@ describe Dog do
 
   #     expect(dog2.id).to eq(dog1.id)
   #   end
+
   #   it 'when two dogs have the same name and different breed, it returns the correct dog' do
   #     dog1 = Dog.create(name: 'teddy', breed: 'cockapoo')
-  #     dog2 = Dog.create(name: 'teddy', breed: 'pug')
+  #     Dog.create(name: 'teddy', breed: 'pug')
 
-  #     dog_from_db = Dog.find_or_create_by({name: 'teddy', breed: 'cockapoo'})
+  #     dog_from_db = Dog.find_or_create_by(name: 'teddy', breed: 'cockapoo')
 
   #     expect(dog_from_db.id).to eq(1)
   #     expect(dog_from_db.id).to eq(dog1.id)
   #   end
-  #   it 'when creating a new dog with the same name as persisted dogs, it returns the correct dog' do
-  #     dog1 = Dog.create(name: 'teddy', breed: 'cockapoo')
-  #     dog2 = Dog.create(name: 'teddy', breed: 'pug')
 
-  #     new_dog = Dog.find_or_create_by({name: 'teddy', breed: 'irish setter'})
+  #   it 'when creating a new dog with the same name as persisted dogs, it returns the correct dog' do
+  #     Dog.create(name: 'teddy', breed: 'cockapoo')
+  #     Dog.create(name: 'teddy', breed: 'pug')
+
+  #     new_dog = Dog.find_or_create_by(name: 'teddy', breed: 'irish setter')
 
   #     expect(new_dog.id).to eq(3)
   #   end
@@ -169,11 +168,11 @@ describe Dog do
 
   # describe '#update' do
   #   it 'updates the record associated with a given instance' do
-  #     teddy.save
+  #     teddy = Dog.create(name: "Teddy", breed: "cockapoo")
   #     teddy.name = "Teddy Jr."
   #     teddy.update
-  #     teddy_jr = Dog.find_by_name("Teddy Jr.")
-  #     expect(teddy_jr.id).to eq(teddy.id)
+  #     also_teddy = Dog.find_by_name("Teddy Jr.")
+  #     expect(also_teddy.id).to eq(teddy.id)
   #   end
   # end
 
