@@ -121,12 +121,12 @@ reusing that code is actually not the best approach. Why? Remember, with
 them to an array of Ruby objects, which are stored in our program's memory. What
 if our `dogs` table had 10,000 rows? That's a lot of extra Ruby objects! In
 cases like these, it's better to use SQL to only return the dogs we're looking
-for, since SQL extremely well-equipped to work with large sets of data.
+for, since SQL is extremely well-equipped to work with large sets of data.
 
 ### `.find(id)`
 
-This class method takes in an ID, and should return a single of `Dog` instance
-for corresponding record in the `dogs` table with that same ID. It behaves
+This class method takes in an ID, and should return a single `Dog` instance for
+the corresponding record in the `dogs` table with that same ID. It behaves
 similarly to the `.find_by_name` method above.
 
 ## Bonus Methods
